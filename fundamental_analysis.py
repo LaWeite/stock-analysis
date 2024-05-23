@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
+import technical_analysis as ta
 
 def plt_scattering_diagram(df):
     x = df['EV/EBITDA']
@@ -17,7 +18,7 @@ def plt_scattering_diagram(df):
     plt.show()
 
 def plt_info(df, info='P/E'):
-    plt.bar(df['Тикер'], df[info], color='skyblue')
+    plt.bar(df['Название'], df[info], color='skyblue')
     plt.title(info)
     plt.xticks(rotation=60, ha='right')
     plt.tight_layout()
@@ -52,7 +53,10 @@ def import_report(url: str):
 def main():
     url = "https://smart-lab.ru/q/shares_fundamental2/?type=MSFO"
     df = import_report(url)
-    plt_info(df[:20], 'P/E')
+    # select company's index
+    index = 0
+    head = list(df.iloc[index][['Название', 'Тикер']])
+    ta.plt_indicator(head, ta.rsi)
 
 if __name__ == '__main__':
     main()
